@@ -1,0 +1,36 @@
+{
+  "name": "salty-duck",
+  "description": "BDD test automation helper ",
+  "keywords": [
+    "BDD",
+    "testing",
+    "bdd",
+    "cucumber",
+    "gherkin",
+    "tests"
+  ],
+  "version": "0.0.0",
+  "repository": {
+    "type":"git",
+    "url": "https://github.com/kenn9j/salty-duck"
+  },
+  "bugs": {
+    "email": "kenn9j@gmail.com",
+    "url": "http://github.com/kenn9j/salty-duck/issues"
+  },
+  "directories": {
+    "lib": "./lib"
+  },
+  "author": "Kenny Joseph <kenn9j@gmail.com>",
+  "contributors": [],
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha test"
+  },
+  "licenses": [
+    {
+      "type":"MIT",
+      "url":"https://github.com/kenn9j/salty-duck/LICENSE"
+    }
+  ]
+}
