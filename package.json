@@ -11,26 +11,45 @@
   ],
   "version": "0.0.0",
   "repository": {
-    "type":"git",
-    "url": "https://github.com/kenn9j/salty-duck"
+    "type": "git",
+    "url": "git+https://github.com/kenn9j/salty-duck.git"
   },
   "bugs": {
-    "email": "kenn9j@gmail.com",
-    "url": "http://github.com/kenn9j/salty-duck/issues"
+    "url": "http://github.com/kenn9j/salty-duck/issues",
+    "email": "kenn9j@gmail.com"
   },
   "directories": {
     "lib": "./lib"
   },
-  "author": "Kenny Joseph <kenn9j@gmail.com>",
+  "author": {
+    "name": "Kenny Joseph",
+    "email": "kenn9j@gmail.com"
+  },
   "contributors": [],
   "main": "index.js",
   "scripts": {
-    "test": "mocha test"
+    "test": "mocha tests/**/*.spec.js"
   },
   "licenses": [
     {
-      "type":"MIT",
-      "url":"https://github.com/kenn9j/salty-duck/LICENSE"
+      "type": "MIT",
+      "url": "https://github.com/kenn9j/salty-duck/LICENSE"
     }
-  ]
+  ],
+  "readmeFilename": "README.md",
+  "homepage": "https://github.com/kenn9j/salty-duck#readme",
+  "dependencies": {
+    "chakram": "^1.0.1",
+    "form-urlencoded": "^0.1.4",
+    "js-yaml": "^3.4.0",
+    "lodash": "^3.10.1",
+    "mssql": "^2.2.0",
+    "urlencode": "^1.1.0",
+    "wd": "^0.3.12"
+  },
+  "devDependencies": {
+    "chai": "^3.2.0",
+    "chai-as-promised": "^5.1.0",
+    "sinon": "^1.16.1"
+  }
 }
