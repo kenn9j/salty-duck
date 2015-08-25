@@ -20,6 +20,16 @@ describe('Salty Config', function () {
       expect(config.debug).to.be.true;
 
     });
+    it('should load the default config file which has no common environment', function () {
+
+      var saltyConfig = require('./../../lib/config');
+
+      var config = saltyConfig.config(testConfig.CONFIG_NO_COMMON_ENV);
+
+      expect(config.debug).to.be.true;
+
+    });
+
     it('should load a YAML config from a settings.yml file', function () {
 
       var saltyConfig = require('./../../lib/config');

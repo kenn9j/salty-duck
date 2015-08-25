@@ -60,12 +60,16 @@ module.exports = {
     },
     responses: {
       otherGetResponse200 : {
-
+        Id: '',
+        Name: 'Bond, James'
       },
       otherGetResponse400 : {
 
       },
       otherGetResponse401 : {
+
+      },
+      otherGetResponse404 : {
 
       }
 

@@ -13,16 +13,44 @@ describe('Salty API Driver', function () {
 
   describe('.loadApiObjects', function(){
 
-    var dummyFilePath = './../../tests/api/dummy.api.js';
+    var dummyRootRelativeFilePath = 'tests/api/dummy.api.js';
+    var dummyRootAnchoredFilePath = '/tests/api/dummy.api.js';
+    var dummyRelativeFilePath = './../../tests/api/dummy.api.js';
 
-    it('should load the scope for an endpoint', function(){
+    it('should load the scope for an endpoint using a root relative path', function(){
       var duck = require('./../../index');
 
       var saltyDuck = duck.init(testConfig.CONFIG_NO_SEASONINGS, 'api-driver');
 
       expect(saltyDuck.loadApiObjects).to.not.be.null;
 
-      var dummyApiScope = saltyDuck.loadApiObjects(dummyFilePath);
+      var dummyApiScope = saltyDuck.loadApiObjects(dummyRootRelativeFilePath);
+
+      expect(dummyApiScope).to.not.be.null;
+      expect(dummyApiScope.name).to.eq('dummyAPI');
+
+    });
+    it('should load the scope for an endpoint using a root relative path that starts with a slash', function(){
+      var duck = require('./../../index');
+
+      var saltyDuck = duck.init(testConfig.CONFIG_NO_SEASONINGS, 'api-driver');
+
+      expect(saltyDuck.loadApiObjects).to.not.be.null;
+
+      var dummyApiScope = saltyDuck.loadApiObjects(dummyRootAnchoredFilePath);
+
+      expect(dummyApiScope).to.not.be.null;
+      expect(dummyApiScope.name).to.eq('dummyAPI');
+
+    });
+    it('should load the scope for an endpoint using a relative path (avoid using)', function(){
+      var duck = require('./../../index');
+
+      var saltyDuck = duck.init(testConfig.CONFIG_NO_SEASONINGS, 'api-driver');
+
+      expect(saltyDuck.loadApiObjects).to.not.be.null;
+
+      var dummyApiScope = saltyDuck.loadApiObjects(dummyRelativeFilePath);
 
       expect(dummyApiScope).to.not.be.null;
       expect(dummyApiScope.name).to.eq('dummyAPI');
@@ -32,7 +60,7 @@ describe('Salty API Driver', function () {
       var duck = require('./../../index');
       var saltyDuck = duck.init(testConfig.CONFIG_NO_SEASONINGS, 'api-driver');
 
-      var dummyApiScope = saltyDuck.loadApiObjects(dummyFilePath);
+      var dummyApiScope = saltyDuck.loadApiObjects(dummyRootRelativeFilePath);
 
       expect(dummyApiScope.searchEndpoint).to.include.keys('requests');
       expect(dummyApiScope.searchEndpoint.requests.searchGetRequest_basic.template() )
@@ -43,7 +71,7 @@ describe('Salty API Driver', function () {
       var duck = require('./../../index');
       var saltyDuck = duck.init(testConfig.CONFIG_NO_SEASONINGS, 'api-driver');
 
-      var dummyApiScope = saltyDuck.loadApiObjects(dummyFilePath);
+      var dummyApiScope = saltyDuck.loadApiObjects(dummyRootRelativeFilePath);
 
       expect(dummyApiScope.searchEndpoint).to.include.keys('requests');
       //fetch original template
@@ -61,7 +89,7 @@ describe('Salty API Driver', function () {
       var duck = require('./../../index');
       var saltyDuck = duck.init(testConfig.CONFIG_NO_SEASONINGS, 'api-driver');
 
-      var dummyApiScope = saltyDuck.loadApiObjects(dummyFilePath);
+      var dummyApiScope = saltyDuck.loadApiObjects(dummyRootRelativeFilePath);
 
       expect(dummyApiScope.otherEndpoint).to.include.keys('requests');
       expect(dummyApiScope.otherEndpoint
@@ -85,11 +113,41 @@ describe('Salty API Driver', function () {
             otherObject: { some:'deepObject' }
           });
     });
+
+    it('should bind the expected Response string', function(){
+      var duck = require('./../../index');
+      var saltyDuck = duck.init(testConfig.CONFIG_NO_SEASONINGS, 'api-driver');
+
+      var dummyApiScope = saltyDuck.loadApiObjects(dummyRootRelativeFilePath);
+      expect(dummyApiScope.otherEndpoint
+          .responses.otherGetResponse200
+          .bindParams({Id:"007"}))
+          .to.eql({
+            Id: '007',
+            Name: 'Bond, James'
+          })
+    });
+
+    it('should bind the expected Response object', function(){
+      var duck = require('./../../index');
+      var saltyDuck = duck.init(testConfig.CONFIG_NO_SEASONINGS, 'api-driver');
+
+      var dummyApiScope = saltyDuck.loadApiObjects(dummyRootRelativeFilePath);
+      expect(dummyApiScope.otherEndpoint
+          .responses.otherGetResponse200
+          .bindParams({Id:"007"}))
+          .to.eql({
+            Id: '007',
+            Name: 'Bond, James'
+          })
+    });
+
+
     it('should bind the default REST headers', function(){
       var duck = require('./../../index');
       var saltyDuck = duck.init(testConfig.CONFIG_NO_SEASONINGS, 'api-driver');
 
-      var dummyApiScope = saltyDuck.loadApiObjects(dummyFilePath);
+      var dummyApiScope = saltyDuck.loadApiObjects(dummyRootRelativeFilePath);
 
       expect(dummyApiScope.headers['Content-Type']).to.not.be.null;
       expect(dummyApiScope.headers.ApiKey).to.eq(123456);
@@ -101,7 +159,7 @@ describe('Salty API Driver', function () {
       var duck = require('./../../index');
       var saltyDuck = duck.init(testConfig.CONFIG_NO_SEASONINGS, 'api-driver');
 
-      var dummyApiScope = saltyDuck.loadApiObjects(dummyFilePath);
+      var dummyApiScope = saltyDuck.loadApiObjects(dummyRootRelativeFilePath);
 
       expect(dummyApiScope.searchEndpoint).to.include.keys('headers');
       expect(dummyApiScope.searchEndpoint.headers.version.bind('2.12.1.0'))

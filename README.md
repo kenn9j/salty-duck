@@ -24,7 +24,7 @@ Read the module's documentation for more details.
 
 We __love__ contributions.
 
-node-sql wouldn't be anything without all the contributors and collaborators who've worked on it.
+salty-duck wouldn't be anything without all the contributors and collaborators who've worked on it.
 If you'd like to become a collaborator here's how it's done:
 
 1. fork the repo
