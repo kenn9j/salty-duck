@@ -6,6 +6,7 @@ var chai = require('chai');
 var expect = chai.expect;
 //chai.use(chaiAsPromised);
 var sinon = require('sinon');
+var _ = require('lodash');
 chai.expect(); //use expect to assert conditions
 var testConfig = require('./../testconfig');
 
@@ -77,9 +78,18 @@ describe('Salty API Driver', function () {
       //fetch original template
       expect(dummyApiScope.searchEndpoint.requests.searchGetRequest_template.template())
           .to.eq("q={{artist}}&type=artist");
-      //basic binding
+      //basic text binding
+      expect(dummyApiScope.searchEndpoint.requests.searchGetRequest_template.bindParams('Hendrix'))
+          .to.eq("q=Hendrix&type=artist");
+      //multi text binding
+      expect(dummyApiScope.searchEndpoint.requests.searchGetRequest_template_withMultiplePlaceholders.bindParams('Hendrix'))
+          .to.eq("q=HendrixHendrix&Hendrixtype=artist");
+      //object params binding
       expect(dummyApiScope.searchEndpoint.requests.searchGetRequest_template.bindParams({artist:'Hendrix'}))
           .to.eq("q=Hendrix&type=artist");
+      //object multiple params binding
+      expect(dummyApiScope.searchEndpoint.requests.searchGetRequest_template_withTwoPlaceholders.bindParams({artist1:'Hendrix',artist2:'Lennon'}))
+          .to.eq("q=Hendrix,Lennon&type=artist");
       //ensure binding handles url encoding
       expect(dummyApiScope.searchEndpoint.requests.searchGetRequest_template.bindParams({artist:'Jimi Hendrix'}))
           .to.eq("q=Jimi%20Hendrix&type=artist");
@@ -149,10 +159,13 @@ describe('Salty API Driver', function () {
 
       var dummyApiScope = saltyDuck.loadApiObjects(dummyRootRelativeFilePath);
 
-      expect(dummyApiScope.headers['Content-Type']).to.not.be.null;
-      expect(dummyApiScope.headers.ApiKey).to.eq(123456);
-      expect(dummyApiScope.headers.Authorization.bind('some-auth-token'))
+      expect(dummyApiScope.searchEndpoint.headers.DefaultOptionsHeader.template()['Content-Type']).to.not.be.null;
+      expect(dummyApiScope.searchEndpoint.headers.DefaultOptionsHeader.template().ApiKey).to.eq(123456);
+      var templateBeforeBinding = dummyApiScope.searchEndpoint.headers.DefaultOptionsHeader.template();
+      expect(dummyApiScope.searchEndpoint.headers.DefaultOptionsHeader.bindParams({Authorization:'some-auth-token'}).Authorization)
           .to.eq('bearer some-auth-token');
+      var templateAfterBinding = dummyApiScope.searchEndpoint.headers.DefaultOptionsHeader.template();
+      expect(templateBeforeBinding).to.not.eql(templateAfterBinding, 'is equal, which means the template was not cloned and it got overwritten');
 
     });
     it('should bind custom headers', function(){
@@ -162,10 +175,39 @@ describe('Salty API Driver', function () {
       var dummyApiScope = saltyDuck.loadApiObjects(dummyRootRelativeFilePath);
 
       expect(dummyApiScope.searchEndpoint).to.include.keys('headers');
-      expect(dummyApiScope.searchEndpoint.headers.version.bind('2.12.1.0'))
-          .to.eq('2.12.1.0');
+      expect(dummyApiScope.searchEndpoint.headers.DefaultOptionsHeader.bindParams({ApiKey:'2.12.1.0'}))
+          .to.eql({
+            "ApiKey": "2.12.1.0",
+            "Authorization": "bearer some-auth-token",
+            "Content-Type": "application/json"
+          });
 
     });
+    it('should load a misc string', function(){
+      var duck = require('./../../index');
+      var saltyDuck = duck.init(testConfig.CONFIG_NO_SEASONINGS, 'api-driver');
+
+      var dummyApiScope = saltyDuck.loadApiObjects(dummyRootRelativeFilePath);
+
+      expect(dummyApiScope.otherEndpoint).to.include.keys('misc');
+      expect(dummyApiScope.otherEndpoint.misc.someSimpleText.template() )
+          .to.eq("Some Simple Text");
+
+    });
+    it('should bind a misc string', function(){
+      var duck = require('./../../index');
+      var saltyDuck = duck.init(testConfig.CONFIG_NO_SEASONINGS, 'api-driver');
+
+      var dummyApiScope = saltyDuck.loadApiObjects(dummyRootRelativeFilePath);
+
+      expect(dummyApiScope.otherEndpoint).to.include.keys('misc');
+      expect(dummyApiScope.otherEndpoint.misc.someTextTemplate
+          .bindParams({bindableText:'Beautiful'}) )
+          .to.eq("Some placeholder was changed to 'Beautiful'");
+
+    });
+
+
   });
   describe('.configure', function(){
     it('should configure the api baseUrl');

@@ -2,20 +2,21 @@
 module.exports = {
   name: 'dummyAPI',
   baseUrl: 'https://api.spotify.com/v1', //todo:[kj] move to config
-  headers: {
-    'Content-Type':'application/json',
-    ApiKey: 123456,
-    Authorization: 'bearer {{token}}'
-  },
   searchEndpoint: {
     url: '/search',
     headers: {
-      version:"{{version}}"
+      DefaultOptionsHeader: {
+        'Content-Type':'application/json',
+        ApiKey: 123456,
+        Authorization: 'bearer {{token}}'
+      }
     },
 
     requests: {
       searchGetRequest_basic: "q=Stevie%20Wonder&type=artist",
-      searchGetRequest_template: "q={{artist}}&type=artist"
+      searchGetRequest_template: "q={{artist}}&type=artist",
+      searchGetRequest_template_withTwoPlaceholders: "q={{artist1}},{{artist2}}&type=artist",
+      searchGetRequest_template_withMultiplePlaceholders: "q={{artist1}}{{artist2}}&{{artist3}}type=artist"
     },
     responses: {
       searchGetResponse200 : {
@@ -73,6 +74,10 @@ module.exports = {
 
       }
 
+    },
+    misc: {
+      someSimpleText:"Some Simple Text",
+      someTextTemplate:"Some placeholder was changed to '{{bindableText}}'"
     }
   }
 

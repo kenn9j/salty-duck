@@ -6,6 +6,7 @@
     - mssql
   environments:
     development:
+      debug: true
       tags: []
       verbose_logging: false
       mochaTimeout: 999999
