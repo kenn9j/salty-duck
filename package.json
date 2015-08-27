@@ -40,6 +40,7 @@
   "homepage": "https://github.com/kenn9j/salty-duck#readme",
   "dependencies": {
     "chakram": "^1.0.1",
+    "colors": "^1.1.2",
     "form-urlencoded": "^0.1.4",
     "js-yaml": "^3.4.0",
     "lodash": "^3.10.1",
