@@ -7,7 +7,7 @@ var expect = chai.expect;
 chai.expect(); //use expect to assert conditions
 var testConfig = require('./../testconfig');
 
-describe('Salty Config', function () {
+describe.only('Salty Config', function () {
 
 
   describe('.config', function () {
@@ -89,6 +89,29 @@ describe('Salty Config', function () {
       expect(seasonings.length).to.equal(2);
 
     });
+  });
+
+  describe('.loadData', function () {
+
+    it('should load list data from a csv into an array', function(){
+
+      var saltyConfig = require('./../../lib/config');
+
+      var fs = require('fs');
+      var parse = require('csv').parse;
+
+      var datalist = saltyConfig.loadCsvData(__dirname+'/data-table.csv');
+
+      console.log(datalist); //use a table formatter here
+      expect(datalist).to.be.eq([ [ 'name', 'place', 'animal', 'thing', 'when' ],
+        [ 'ken', 'kenya', 'kangaroo', 'kite', '12/02/15' ],
+        [ 'nige', 'nigeria', 'nightingale', 'nail', '13/02/15' ] ]);
+
+
+    });
+    it('should load list data from a csv into an array ignoring the headers');
+    it('should load list data from a csv into an array of objects?');
+
   });
 
 });

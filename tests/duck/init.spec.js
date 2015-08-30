@@ -132,6 +132,23 @@ describe('Salty Duck', function () {
       sandbox.restore();
 
     });
+    it('should dump an object with a message when debug is true', function () {
+      var duck = require('./../../index');
+
+      var saltyDuck = duck.init(testConfig.DEFAULT_CONFIG_FOR_TESTS);
+
+      saltyDuck.quack('Fancy object', {I:'am a fancy object', that:'is being dumped on the console', by:'a duck'});
+
+      var sandbox = sinon.sandbox.create();
+      sandbox.stub(console, "log");
+
+      saltyDuck.quack('Fancy object', {I:'am a fancy object', that:'is being dumped on the console', by:'a duck'});
+
+      sinon.assert.called(console.log);
+
+      sandbox.restore();
+
+    });
 
   });
 });

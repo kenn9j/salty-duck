@@ -38,7 +38,8 @@
         testFolder: "/results"
         thinkTime: 1
         waitingForPageSleep: 1
-        baseUrl: "http://devop5.io"
+#        baseUrl: "http://devop5.io"
+        baseUrl: "https://api.spotify.com"
       dbConfig:
         user: ""
         password: ""

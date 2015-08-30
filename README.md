@@ -26,8 +26,8 @@ Coming soon..
 ## Getting Started with a duck
 To get a salty-duck going you will need to 
 
-  1. **Get a Duck** - `npm install salty-duck` - or see below
-  2. **Get Salt** - have a `settings.yml` file in the root folder
+  1. **Install the package** - `npm install salty-duck` - or see below
+  2. **Bring the salt** - have a `settings.yml` file in the root folder
   3. **Prep your kitchen** - create a folder called `tests` or whatever
   4. **Setup your bench** - create a spec file as in `myTest.spec.js`
   5. **Add salt** - `var saltyDuck = require('salty-duck').init()`

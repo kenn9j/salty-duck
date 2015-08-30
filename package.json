@@ -41,6 +41,7 @@
   "dependencies": {
     "chakram": "^1.0.1",
     "colors": "^1.1.2",
+    "csv": "^0.4.6",
     "form-urlencoded": "^0.1.4",
     "js-yaml": "^3.4.0",
     "lodash": "^3.10.1",

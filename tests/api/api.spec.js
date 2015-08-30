@@ -18,6 +18,7 @@ describe('Salty API Driver', function () {
     var dummyRootAnchoredFilePath = '/tests/api/dummy.api.js';
     var dummyRelativeFilePath = './../../tests/api/dummy.api.js';
 
+    //validate input params
     it('should load the scope for an endpoint using a root relative path', function(){
       var duck = require('./../../index');
 
@@ -57,6 +58,8 @@ describe('Salty API Driver', function () {
       expect(dummyApiScope.name).to.eq('dummyAPI');
 
     });
+
+    //requests templates
     it('should load a basic GET request for an endpoint', function(){
       var duck = require('./../../index');
       var saltyDuck = duck.init(testConfig.CONFIG_NO_SEASONINGS, 'api-driver');
@@ -110,7 +113,7 @@ describe('Salty API Driver', function () {
           .template())
           .to.eql({
             otherName: "",
-            otherList: [1,2,3,4],
+            otherList: [],
             otherObject: { some:'deepObject' }
           });
       //assert binding
@@ -124,6 +127,7 @@ describe('Salty API Driver', function () {
           });
     });
 
+    //responses templates
     it('should bind the expected Response string', function(){
       var duck = require('./../../index');
       var saltyDuck = duck.init(testConfig.CONFIG_NO_SEASONINGS, 'api-driver');
@@ -137,7 +141,6 @@ describe('Salty API Driver', function () {
             Name: 'Bond, James'
           })
     });
-
     it('should bind the expected Response object', function(){
       var duck = require('./../../index');
       var saltyDuck = duck.init(testConfig.CONFIG_NO_SEASONINGS, 'api-driver');
@@ -152,7 +155,7 @@ describe('Salty API Driver', function () {
           })
     });
 
-
+    //headers templates
     it('should bind the default REST headers', function(){
       var duck = require('./../../index');
       var saltyDuck = duck.init(testConfig.CONFIG_NO_SEASONINGS, 'api-driver');
@@ -183,6 +186,8 @@ describe('Salty API Driver', function () {
           });
 
     });
+
+    //misc templates
     it('should load a misc string', function(){
       var duck = require('./../../index');
       var saltyDuck = duck.init(testConfig.CONFIG_NO_SEASONINGS, 'api-driver');
@@ -206,7 +211,94 @@ describe('Salty API Driver', function () {
           .to.eq("Some placeholder was changed to 'Beautiful'");
 
     });
+    it('should deep bind an object template', function(){
+      var duck = require('./../../index');
+      var saltyDuck = duck.init(testConfig.CONFIG_NO_SEASONINGS, 'api-driver');
 
+      var dummyApiScope = saltyDuck.loadApiObjects(dummyRootRelativeFilePath);
+
+      expect(dummyApiScope.otherEndpoint).to.include.keys('misc');
+
+      var boundObject = dummyApiScope.otherEndpoint.misc.someDeepObject
+          .bindParams({
+            bindableText:'Beautiful',
+            level: {
+              one: {
+                two: {
+                  three: {
+                    //fourString: "some string on level 4", <-- omit a line
+                    fourStringToBeBound: "'four'",
+                    fourObject: {some:1, thing: 4.2, blah: 3.1}
+                  }
+                }
+              }
+            }
+          });
+
+      var expectedObject = {
+        "bindableText": "Beautiful",
+        "level": {
+          "one": {
+            "two": {
+              "three": {
+                "fourObject": {
+                  "blah": 3.1,
+                  "some": 1,
+                  "thing": 4.2
+                },
+                "fourString": "some string on level 4",
+                "fourStringToBeBound": "some string on level 'four'",
+              }
+            }
+          }
+        }
+      };
+
+      saltyDuck.quack('something', boundObject);
+
+      expect(boundObject)
+          .to.eql(expectedObject);
+
+    });
+
+    //endpoint
+    it('should build a full endpoint url');
+    it('should use a mock url for an endpoint when mock switch is true');
+
+    //fancy binding
+    xit('should bind a deep object with dot separated hierarchical param key string eg User.firstName', function(){
+
+      var duck = require('./../../index');
+      var saltyDuck = duck.init(testConfig.CONFIG_NO_SEASONINGS, 'api-driver');
+
+      var dummyApiScope = saltyDuck.loadApiObjects(dummyRootRelativeFilePath);
+
+      expect(dummyApiScope.otherEndpoint).to.include.keys('misc');
+      expect(dummyApiScope.otherEndpoint.misc.someDeepObject
+          .bindParams({
+            bindableText:'Beautiful',
+            'level.one.two.three.fourStringToBeBound': "'four'"
+          }) )
+          .to.eql({
+            "bindableText": "Beautiful",
+            "level": {
+              "one": {
+                "two": {
+                  "three": {
+                    "fourObject": {
+                      "blah": 3.1,
+                      "some": 1,
+                      "thing": 4.2
+                    },
+                    "fourString": "some string on level 4",
+                    "fourStringToBeBound": "some string on level 'four'",
+                  }
+                }
+              }
+            }
+          });
+
+    });
 
   });
   describe('.configure', function(){

@@ -1,7 +1,7 @@
 'use strict';
 module.exports = {
   name: 'dummyAPI',
-  baseUrl: 'https://api.spotify.com/v1', //todo:[kj] move to config
+  url: '/v1', //todo:[kj] move to config
   searchEndpoint: {
     url: '/search',
     headers: {
@@ -50,7 +50,7 @@ module.exports = {
       otherGetRequest_basic: "?someQueryString",
       otherPostRequest_basic: {
         otherName: "",
-        otherList: [1,2,3,4],
+        otherList: [],
         otherObject: { some:'deepObject' }
       },
       otherPutRequest_basic: {
@@ -77,9 +77,20 @@ module.exports = {
     },
     misc: {
       someSimpleText:"Some Simple Text",
-      someTextTemplate:"Some placeholder was changed to '{{bindableText}}'"
+      someTextTemplate:"Some placeholder was changed to '{{bindableText}}'",
+      someDeepObject:{
+        level: {
+          one: {
+            two: {
+              three: {
+                fourString: "some string on level 4",
+                fourStringToBeBound: "some string on level {{four}}",
+                fourObject: {some:1, thing: 2}
+              }
+            }
+          }
+        }
+      }
     }
   }
-
-
 };

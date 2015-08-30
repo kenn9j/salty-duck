@@ -73,6 +73,7 @@ Duck.init = function init(options, seasonings, configObject) {
 /**
  *  Duck.quack(say [optional]) -> null
  *  - say (string): quacks something. Null value just quacks.
+ *  - optionalObjectToQuack (object): quacks the object on a newline.
  *
  *  Console.logs what you want it to for now. Can be switched off for other environments by
  *
@@ -85,11 +86,17 @@ Duck.init = function init(options, seasonings, configObject) {
  *
  **/
 
-Duck.quack = function (say) {
+Duck.quack = function (say, optionalObjectToQuack) {
   if (!_canQuack)
     return;
   if (say) {
-    console.log(say);
+    if(optionalObjectToQuack){
+      console.log(say.cyan + ': ' + ('....................................................................\n'.substr(say.length)).cyan );
+      console.log(optionalObjectToQuack);
+      console.log('\n......................................................................\n'.cyan);
+      return;
+    }
+    console.log(say.cyan);
     return;
   }
 
