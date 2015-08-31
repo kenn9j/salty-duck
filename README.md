@@ -32,7 +32,7 @@ To get a salty-duck going you will need to
   4. **Setup your bench** - create a spec file as in `myTest.spec.js`
   5. **Add salt** - `var saltyDuck = require('salty-duck').init()`
   6. **Add seasoning** (to your duck) - choose which framework(s) you need in the helper e.g `saltyDuck.addSeasoning('api-driver')` 
-  7. Follow the seasonings conventions ... - see [duck seasonings](seasonings.md)
+  7. **Bake it** Run your tests ... - Follow the conventions see [duck seasonings](seasonings.md)
 
 ### 1. Install (or get a duck)
 
@@ -78,12 +78,11 @@ The settings.yml has a conventional structure to follow as here. Copy the struct
     ---
     # some examples here
     # https://github.com/nodeca/js-yaml/blob/master/examples/sample_document.yml
-      seasonings:
+      seasonings: #optional, holds a list of helpers to be loaded
         - wd
         - mssql
       environments:
-        common:
-          debug: true
+        common: #these settings used on all envrionments
           dbConfig:
             user: ""
             password: ""
@@ -97,27 +96,28 @@ The settings.yml has a conventional structure to follow as here. Copy the struct
               min: 0
               idleTimeoutMillis: 30000
         development:
-          debug: true
-          tags: []
-          verbose_logging: false
-          mochaTimeout: 999999
-          driverStartupWaitTime: 5000
-          implicitWaitTimeout: 10000
-          asyncScriptTimeout: 10000
-          caps:
-            browserName: "chrome"
-          driverConfig:
-            host: "localhost"
-            port: 4444
-          driverOptions:
-            timeout: 30000
+          debug: true #tells salty-duck to show or hide your quacks
+          tags: [] #wd
+          verbose_logging: false #tells salty-duck to do verbose logging
+          mochaTimeout: 999999 #provides a default mocha time out
+          driverStartupWaitTime: 5000 #wd uses it to wait for browser to startup 
+          implicitWaitTimeout: 10000 #wd
+          asyncScriptTimeout: 10000 #wd
+          caps: #wd
+            browserName: "chrome" #wd
+          driverConfig: #wd 
+            host: "localhost" #wd points to default wd server
+            port: 4444 #wd points to default wd port
+          driverOptions: #wd
+            timeout: 30000 
             retries: 3
             retryDelay: 2000
-            testFolder: "/results"
-            thinkTime: 1
-            waitingForPageSleep: 1
-            baseUrl: "http://devop5.io"
-          dbConfig:
+            #wd custom for SaltyWebDriver
+            testFolder: "/results" #wd reports storage location
+            thinkTime: 1  #wd slow the tests down
+            waitingForPageSleep: 1 
+            baseUrl: "http://devop5.io" 
+          dbConfig: #sql-helper
             user: ""
             password: ""
             server: ""
@@ -128,7 +128,7 @@ The settings.yml has a conventional structure to follow as here. Copy the struct
             pool:
               max: 10
               min: 0
-              idleTimeoutMillis: 30000
+              idleTimeoutMillis: 30000 
         ci:
           debug: false
           tags: []
@@ -239,26 +239,108 @@ The 'api-driver' helper seasoning follows a convention to speed up api test auth
   
   
   
-  5. To use a behavior-driven approach, set up your api scope file, then start from the test itself. 
+  5. To use a behavior-driven approach, set up your api scope file, then start from the test itself and add your api objects into the api scope file. 
   6. Given you have a test spec as follows 
   
-        ``` javascript - tests/Quote/quote.api.js
-        
-        'use strict';
-        
-        module.exports = { 
-          name: 'Sauce Provider API', 
-          url: '/apiService',           
-          sauceEndpoint: { 
-            url: '/sauce'
-            requests: {}, 
-            responses: {}, 
-            headers: {}, 
-            misc: {} } 
-          }
+        GET Requests .. 
+                
+                ``` javascript - tests/Quote/quote.api.js
+                
+                'use strict';
+                
+                module.exports = { 
+                  name: 'Quote Provider API', 
+                  url: '/apiService',           
+                  quoteEndpoint: { 
+                    url: '/quote'
+                    
+                    requests: {
+                    
+                      //a simple request that can be reused as is by other tests
+                      QuoteGetRequestDefault: "q=CarInsurance&type=Caravan",
+                      
+                      //a request template that can be bound with parameters
+                      QuoteGetRequestTemplate: "q={{insuranceType}}&type={{vehicleType}}",
+                      
+                      //post request, can be used as is, or bound to new parameters
+                      QuotePostRequest: {
+                        userId: 'someUser',
+                        amount: 1234.00,
+                        insuranceType: 'car',
+                        vehicleType: 'lmv',
+                        expires: '2016-10-12'
+                      }
+                    
+                    }, 
+                    
+                    responses: {}, 
+                    headers: {
+                          //header template
+                          DefaultOptionsHeader: {
+                            'Content-Type':'application/json',
+                            OurApiKey: 123456,
+                            Authorization: 'bearer {{token}}'
+                          }
+                    }, 
+                    misc: {} 
+                    } 
+                  }
+                  
+                ```
+                
+      You can refer to any api object, or bind them with parameters as below. Note that all objects can be 
+      
+      * retrieved - using .template()
+      * bound - using .bindParams()
+      * excepting - schemas as it is expected to be static
+      * bonus - endpoint.getUrl() - url will be bound by bubbling up the tree to generate the full url
+      * bonus - endpoint.xxxGetRequestxx.getUrl(params) - GetRequest templates can bind and return a full url if params are provided in the getUrl call
+    
+        ``` .. inside a mocha describe .. it('test..', function(){ 
           
+          // ARRANGE =========
+          
+          var dummyApiScope = saltyDuck.loadApiObjects('/RootRelative/FilePath/to/Quote/quote.api.js');
+          var endpoint = dummyApiScope.quoteEndpoint;
+          //use chakram to post your request and validate the results
+          
+          //1. prep url
+          var url = endpoint.getUrl(dummyApiScope.quoteEndpoint.requests.QuoteGetRequestDefault);
+          
+          //for get urls, you can also
+          //var url = endpoint.requests.QuoteGetRequestDefault.getUrl();
+          //or also bind a GET url placeholders to an object
+          //var url = endpoint.requests.QuoteGetRequestTemplate.getUrl( { insuranceType:'car', vehicleType: 'bus' });
+          
+          //2. prep data (if not a GET request)
+          var postdata = endpoint.requests.QuotePostRequest.bindParams( 
+            {
+              userId: 'differentUser',
+              amount: 4567.50,
+              insuranceType: 'car',
+              vehicleType: 'bus',
+              expires: '2017-12-12'
+            }
+          );
+          
+          //3. prep headers
+          // bind them as necessary with Auth tokens, content-length, etc
+          
+          // ACT =============
+          //4. make the request
+          
+          var response = chakram.post(url, postdata, headers);
+          
+          // ASSERT ==========
+          //5. get schemas for validation
+          //use a JSON schema generator to quickly generate and store schemas
+          expect(response).to.be... //see chakram assertions for more
+          
+          // END =============
+          return chakram.wait(); 
+          //remember to return from above line or your test will hang
+
         ```
-  
 
 Read the module's documentation for more details.
 

@@ -43,7 +43,7 @@ describe.only('Salty Config', function () {
 
       var saltyConfig = require('./../../lib/config');
 
-      var config = saltyConfig.config('./../tests/config/settings-json.json', { settingsFormat:'json' });
+      var config = saltyConfig.config('./../tests/config/settings-json.json', {settingsFormat: 'json'});
 
       expect(config.debug).to.be.true;
 
@@ -53,7 +53,7 @@ describe.only('Salty Config', function () {
 
       var saltyConfig = require('./../../lib/config');
 
-      var config = saltyConfig.config({configFile:testConfig.DEFAULT_CONFIG_FOR_TESTS});
+      var config = saltyConfig.config({configFile: testConfig.DEFAULT_CONFIG_FOR_TESTS});
 
       expect(config.debug).to.be.true;
 
@@ -91,26 +91,71 @@ describe.only('Salty Config', function () {
     });
   });
 
-  describe('.loadData', function () {
+  describe.only('.loadData', function () {
 
-    it('should load list data from a csv into an array', function(){
+    it('should throw proper error message (instead of ENOENT) when wrong file path is provided', function () {
 
       var saltyConfig = require('./../../lib/config');
 
-      var fs = require('fs');
-      var parse = require('csv').parse;
+      return saltyConfig
+          .loadCsvData('tests/config/data-table-does-not-exist.csv')
 
-      var datalist = saltyConfig.loadCsvData(__dirname+'/data-table.csv');
+          .catch(function (err) {
+            expect(err).to.match(/Error: File not found. Please check your file path/);
 
-      console.log(datalist); //use a table formatter here
-      expect(datalist).to.be.eq([ [ 'name', 'place', 'animal', 'thing', 'when' ],
-        [ 'ken', 'kenya', 'kangaroo', 'kite', '12/02/15' ],
-        [ 'nige', 'nigeria', 'nightingale', 'nail', '13/02/15' ] ]);
-
+          });
 
     });
-    it('should load list data from a csv into an array ignoring the headers');
-    it('should load list data from a csv into an array of objects?');
+    it('should load list data from a csv into an array', function () {
+
+      var saltyConfig = require('./../../lib/config');
+
+      return saltyConfig
+          .loadCsvData('tests/config/data-table.csv')
+          .then(function (datalist) {
+            expect(datalist).to.be.eql(
+                [
+                  ['name', 'place', 'animal', 'thing', 'when'],
+                  ['ken', 'kenya', 'kangaroo', 'kite', '12/02/15'],
+                  ['nige', 'nigeria', 'nightingale', 'nail', '13/02/15']
+                ]);
+
+          });
+
+    });
+    it('should load list data from a csv into an array skipping the headers', function () {
+
+      var saltyConfig = require('./../../lib/config');
+
+      return saltyConfig
+          .loadCsvData('tests/config/data-table.csv', {skipHeaders: true})
+          .then(function (datalist) {
+            expect(datalist).to.be.eql(
+                [
+                  ['ken', 'kenya', 'kangaroo', 'kite', '12/02/15'],
+                  ['nige', 'nigeria', 'nightingale', 'nail', '13/02/15']]
+            );
+
+          });
+
+    });
+    it('should load list data from a csv into objects with header-based column names', function () {
+
+      var saltyConfig = require('./../../lib/config');
+
+      return saltyConfig
+          .loadCsvData('tests/config/data-table.csv', {columns: true})
+          .then(function (datalist) {
+            expect(datalist).to.be.eql(
+                [
+                  {'name': 'ken', 'place': 'kenya', 'animal': 'kangaroo', 'thing': 'kite', 'when': '12/02/15'},
+                  {'name': 'nige', 'place': 'nigeria', 'animal': 'nightingale', 'thing': 'nail', 'when': '13/02/15'}
+                ]
+            );
+          });
+
+    });
+    it('should load list data from a csv and format as table');
 
   });
 
