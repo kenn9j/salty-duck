@@ -7,7 +7,7 @@ var expect = chai.expect;
 chai.expect(); //use expect to assert conditions
 var testConfig = require('./../testconfig');
 
-describe.only('Salty Config', function () {
+describe('Salty Config', function () {
 
 
   describe('.config', function () {
@@ -91,7 +91,7 @@ describe.only('Salty Config', function () {
     });
   });
 
-  describe.only('.loadData', function () {
+  describe('.loadData', function () {
 
     it('should throw proper error message (instead of ENOENT) when wrong file path is provided', function () {
 

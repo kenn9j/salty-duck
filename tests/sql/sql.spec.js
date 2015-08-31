@@ -7,7 +7,7 @@ var testConfig = require('./../testconfig');
 var sinon = require('sinon');
 var _ = require('lodash');
 
-describe.only('Salty SqlDriver', function () {
+describe('Salty SqlDriver', function () {
 
   describe('.config', function () {
 
