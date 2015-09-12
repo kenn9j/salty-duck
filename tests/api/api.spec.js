@@ -5,6 +5,7 @@ var chai = require('chai');
 //var chaiAsPromised = require('chai-as-promised');
 var expect = chai.expect;
 //chai.use(chaiAsPromised);
+var path = require('path');
 var sinon = require('sinon');
 var _ = require('lodash');
 chai.expect(); //use expect to assert conditions
@@ -262,7 +263,18 @@ describe('Salty API Driver', function () {
     });
 
     //endpoint
-    it('should build a full endpoint url');
+    it('should build a full endpoint url', function() {
+      var duck = require('./../../index');
+      var saltyDuck = duck.init(testConfig.CONFIG_NO_SEASONINGS, 'api-driver');
+
+      var dummyApiScope = saltyDuck.loadApiObjects(dummyRootRelativeFilePath);
+      var endpoint = dummyApiScope.otherEndpoint;
+
+      var url = endpoint.getUrl();
+
+      expect(url).to.be.equal(path.join(saltyDuck.salt.api.apiBaseUrl, '/v1/other') );
+
+    });
     it('should use a mock url for an endpoint when mock switch is true');
 
     //fancy binding

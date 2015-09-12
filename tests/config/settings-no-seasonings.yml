@@ -18,6 +18,9 @@
           min: 0
           idleTimeoutMillis: 30000
     development:
+      api:
+        apiBaseUrl: "https://saltyduck.devop5.io"
+
       tags: []
       verbose_logging: false
       mochaTimeout: 999999

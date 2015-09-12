@@ -45,7 +45,7 @@ module.exports = {
     }
   },
   otherEndpoint: {
-    //url: '/search',
+    url: '/other',
     requests: {
       otherGetRequest_basic: "?someQueryString",
       otherPostRequest_basic: {

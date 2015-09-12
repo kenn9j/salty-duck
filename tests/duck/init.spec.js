@@ -67,39 +67,44 @@ describe('Salty Duck', function () {
       saltyDuck.quack();
 
       var sandbox = sinon.sandbox.create();
-      sandbox.stub(console, "log");
-      sandbox.stub(console, "error");
 
-      saltyDuck.quack();
+      try {
+        sandbox.stub(console, "log");
+
+        saltyDuck.quack();
 
 
-      var quackMessage = "\n" +
-          "     _".yellow +
-          "        _".yellow +
-          "      _".yellow +
-          "\n".yellow +
-          "  __(".yellow +
-          "'".red +
-          ")<".yellow +
-          "   __(".yellow +
-          "'".red +
-          ")>".yellow +
-          " __(".yellow +
-          "'".red +
-          ")=".yellow +
-          "\n".yellow +
-          "  \\___)".yellow +
-          " .,.".cyan +
-          "\\___)".yellow +
-          ",.".cyan +
-          "\\___)".yellow + "\n" +
-          "`','.'``,.`'..,`',.`'^.'``,.`'..,`'`".cyan +
-          "\nQuack, Quack!" +
-          "\n    if it quacks like a duck, it's a salty duck!\n\n";
+        var quackMessage = "\n" +
+            "     _".yellow +
+            "        _".yellow +
+            "      _".yellow +
+            "\n".yellow +
+            "  __(".yellow +
+            "'".red +
+            ")<".yellow +
+            "   __(".yellow +
+            "'".red +
+            ")>".yellow +
+            " __(".yellow +
+            "'".red +
+            ")=".yellow +
+            "\n".yellow +
+            "  \\___)".yellow +
+            " .,.".cyan +
+            "\\___)".yellow +
+            ",.".cyan +
+            "\\___)".yellow + "\n" +
+            "`','.'``,.`'..,`',.`'^.'``,.`'..,`'`".cyan +
+            "\nQuack, Quack!" +
+            "\n    if it quacks like a duck, it's a salty duck!\n\n";
 
-      sinon.assert.calledWithExactly(console.log, quackMessage);
+        sinon.assert.calledWithExactly(console.log, quackMessage);
 
-      sandbox.restore();
+      } catch (e) {
+        throw e;
+      } finally {
+        sandbox.restore();
+      }
 
     });
     it('should log a message when debug is true', function () {
@@ -108,13 +113,21 @@ describe('Salty Duck', function () {
       var saltyDuck = duck.init(testConfig.DEFAULT_CONFIG_FOR_TESTS);
 
       var sandbox = sinon.sandbox.create();
-      sandbox.stub(console, "log");
 
-      saltyDuck.quack('this must be logged');
+      try {
 
-      sinon.assert.called(console.log);
+        sandbox.stub(console, "log");
 
-      sandbox.restore();
+        saltyDuck.quack('this must be logged');
+
+        sinon.assert.calledWithMatch(console.log, 'this must be logged');
+
+      } catch (e) {
+        throw e;
+      } finally {
+        sandbox.restore();
+      }
+
 
     });
     it('should not log a message when debug is false', function () {
@@ -137,12 +150,12 @@ describe('Salty Duck', function () {
 
       var saltyDuck = duck.init(testConfig.DEFAULT_CONFIG_FOR_TESTS);
 
-      saltyDuck.quack('Fancy object', {I:'am a fancy object', that:'is being dumped on the console', by:'a duck'});
+      saltyDuck.quack('Fancy object', {I: 'am a fancy object', that: 'is being dumped on the console', by: 'a duck'});
 
       var sandbox = sinon.sandbox.create();
       sandbox.stub(console, "log");
 
-      saltyDuck.quack('Fancy object', {I:'am a fancy object', that:'is being dumped on the console', by:'a duck'});
+      saltyDuck.quack('Fancy object', {I: 'am a fancy object', that: 'is being dumped on the console', by: 'a duck'});
 
       sinon.assert.called(console.log);
 
