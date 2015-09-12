@@ -18,7 +18,21 @@ describe('Salty SqlDriver', function () {
     it('should update records int the db');
     it('should delete records from the db');
 
-    it('should bind the sql with params from a string');
+    it('should bind the sql with params from a string', function(){
+
+      var duck = require('./../../index');
+      var saltyDuck = duck.init(testConfig.CONFIG_NO_SEASONINGS, 'sql');
+
+      var sqlObjects =  saltyDuck
+          .loadSqlObjects('/tests/sql/sometest.sql.js')
+          .select('').where('');
+
+      var sqlObjects =  saltyDuck
+          .loadSqlObjects('/tests/sql/sometest.sql.js')
+          .select('').where('');
+
+
+    });
     it('should bind the sql with params from an array');
     it('should bind the sql with params from an object');
 
