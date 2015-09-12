@@ -16,6 +16,7 @@ var Duck = module.exports = function Duck(salt, seasonings) {
 };
 
 Duck = _.assign(Duck, require('./lib/salty'));
+Duck = _.assign(Duck, require('./lib/config'));
 
 /**
  *  Duck.init(options [optional], seasonings [optional], configObject [optional]) -> Duck
@@ -46,8 +47,8 @@ Duck = _.assign(Duck, require('./lib/salty'));
 Duck.init = function init(options, seasonings, configObject) {
 
   //if no config use defaults
-  var saltyConfig = require('./lib/config');
-  var salt = _salt = configObject || saltyConfig.config(options);
+  //var saltyConfig = require('./lib/config');
+  var salt = _salt = configObject || this.config(options);
 
   if (salt) { //todo: fix this for null config
 
@@ -55,8 +56,8 @@ Duck.init = function init(options, seasonings, configObject) {
 
     Duck.reportsFolder = _salt.reportsFolder;
     Duck.salt = Duck.testConfig = salt;
-    _seasonings = saltyConfig.seasonings(options, seasonings);
-    _.each(_seasonings, function (seasoning) {
+    var effectiveSeasonings = Duck.seasonings(options, seasonings);
+    _.each(effectiveSeasonings, function (seasoning) {
       Duck.addSeasoning(seasoning);
     });
 
@@ -65,7 +66,7 @@ Duck.init = function init(options, seasonings, configObject) {
   }
 
 
-  _duck = this;
+  _duck = Duck;
 
   return this;
 };
@@ -127,13 +128,22 @@ Duck.quack = function (say, optionalObjectToQuack) {
   console.log(quackMessage);
 };
 
-
+/**
+ * addSeasoning
+ * add extensions (seasonings) to the core salty-duck helper based on what type of tests you wish to run
+ * @param seasoning
+ */
 Duck.addSeasoning = function (seasoning) {
-  _seasonings.push(seasoning);
+
+
+  var hasSeasoning = _.includes(_seasonings, seasoning);
+  if(hasSeasoning)
+    return;
+
   if (/$\./.test(seasoning) && fs.existsSync(seasoning)) {
     Duck = _.assign(Duck, require(seasoning));
     Duck.quack('Quack!'.cyan +
-    ' added seasoning..  ' + seasoning);
+    ' added custom seasoning..  ' + seasoning);
   } else {
     var seasoningLib = require('./lib/seasoning/' + seasoning);
     Duck = _.assign(Duck, seasoningLib);
@@ -141,7 +151,11 @@ Duck.addSeasoning = function (seasoning) {
     ' added seasoning..  ' + seasoning + " - "
     + seasoningLib.NAME + " " + seasoningLib.DESCRIPTION);
   }
-}
+
+  _seasonings.push(seasoning);
+
+};
+
 Duck.instance = function () {
   return _duck || this;
 };
