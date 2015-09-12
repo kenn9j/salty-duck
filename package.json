@@ -39,6 +39,7 @@
   "readmeFilename": "README.md",
   "homepage": "https://github.com/kenn9j/salty-duck#readme",
   "dependencies": {
+    "bluebird": "^2.9.34",
     "chakram": "^1.0.1",
     "colors": "^1.1.2",
     "csv": "^0.4.6",
