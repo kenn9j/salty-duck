@@ -92,12 +92,17 @@ Duck.quack = function (say, optionalObjectToQuack) {
     return;
   if (say) {
     if(optionalObjectToQuack){
-      console.log(say.cyan + ': ' + ('....................................................................\n'.substr(say.length)).cyan );
+      console.log(say + ': ' + ('....................................................................\n'.substr(say.length)) );
       console.log(optionalObjectToQuack);
-      console.log('\n......................................................................\n'.cyan);
+      console.log('\n......................................................................\n');
       return;
     }
-    console.log(say.cyan);
+
+    if(_.isString(say))
+      console.log(say);
+
+    console.log(say);
+
     return;
   }
 
