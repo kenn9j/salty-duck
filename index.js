@@ -11,12 +11,18 @@ var colors = require('colors');
 var fs = require('fs');
 var path = require('path');
 var _salt, _seasonings = [], _duck, _canQuack = true;
-var Duck = module.exports = function Duck(salt, seasonings) {
-  return this;
-};
+
+
+function Duck() {
+  return this.init();
+}
 
 Duck = _.assign(Duck, require('./lib/salty'));
 Duck = _.assign(Duck, require('./lib/config'));
+
+//include default seasonings
+Duck.webdriver = require('./lib/seasoning/webdriver');
+Duck.api = require('./lib/seasoning/api');
 
 /**
  *  Duck.init(options [optional], seasonings [optional], configObject [optional]) -> Duck
@@ -65,10 +71,7 @@ Duck.init = function init(options, seasonings, configObject) {
     throw new Error("No config provided or available.");
   }
 
-
-  _duck = Duck;
-
-  return this;
+  return Duck;
 };
 
 /**
@@ -145,27 +148,40 @@ Duck.addSeasoning = function (seasoning) {
   if(hasSeasoning)
     return;
 
-  if (/$\./.test(seasoning) && fs.existsSync(seasoning)) {
-    Duck = _.assign(Duck, require(seasoning));
-    Duck.quack('Quack!'.cyan +
-    ' added custom seasoning..  ' + seasoning);
+  if(!seasoning.location && typeof(seasoning) == 'string'){
+    seasoning = { name: seasoning, location: seasoning };
+  }
+
+  if (/^\./.test(seasoning.location)) {
+    if (fs.existsSync(seasoning)) {
+      Duck = _.assign(Duck, require(seasoning.location));
+      Duck.quack('Quack!'.cyan +
+          ' added custom seasoning..  ' + seasoning.location);
+    } else {
+      //throw new Error('Module ' + seasoning.location + ' could not be found.');
+      Duck.quack('Module ' + seasoning.location + ' could not be found.');
+    }
+
   } else {
-    var seasoningLib = require('./lib/seasoning/' + seasoning);
-    Duck = _.assign(Duck, seasoningLib);
-    Duck.quack('Quack!'.cyan +
-    ' added seasoning..  ' + seasoning + " - "
-    + seasoningLib.NAME + " " + seasoningLib.DESCRIPTION);
+
+    try {
+      var seasoningLib = require('./lib/seasoning/' + seasoning.location);
+      Duck[seasoning.name] = seasoningLib ;// _.assign(Duck, seasoningLib);
+      Duck.quack('Quack!'.cyan +
+          ' added seasoning..  ' + seasoning + " - "
+          + seasoningLib.NAME + " " + seasoningLib.DESCRIPTION);
+    } catch (e) {
+      Duck.quack(e.message + '\n' + 'Module ' + seasoning.location + ' could not be found.');
+      //throw new Error('Module ' + seasoningLib + ' could not be found.');
+    }
   }
 
   _seasonings.push(seasoning);
 
 };
 
-Duck.instance = function () {
-  return _duck || this;
-};
-
 //
 Duck.NAME = 'Duck';
 Duck.VERSION = '0.0.1';
 
+module.exports = Duck;

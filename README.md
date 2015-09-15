@@ -8,12 +8,12 @@ This is a helper framework. In my year(s) of working with nodejs test automation
 The goal of this framework is to get you started with test automation on nodejs as quickly as possible, with no special opinions on frameworks, just helpers to make things as easy as possible for you to take off.
 
 The included frameworks cover.. 
-* Cucumber-js with wd.js for WebDriver-style testing (selenium or phantomjs)
+* Cucumber-js with webdriver.js for WebDriver-style testing (selenium or phantomjs)
 * Mocha with Chakram for API Tests 
 
 Coming soon..
 * Cucumber-js with Chakram for API Tests 
-* Mocha with wd.js for API Tests 
+* Mocha with webdriver.js for API Tests 
 * Mocha for angularjs tests 
 * Sql helpers 
 * Reporting helpers 
@@ -71,7 +71,7 @@ OR if you like to keep your tests with your existing node.js app, you may also d
 ### 2. Adding Salt (or a settings file)
 Add a settings.yml (or settings.json) file to your project root. We recommend YAML as its easier for non-javascript ninjas to manipulate, allows commenting and keeps things simple.
 
-The settings.yml has a conventional structure to follow as here. Copy the structure below. All you need initially is the environments, environments > common, environments > development. What is under them is not as per you chosen test frameworks (wd.js, chakram, sql, etc.)
+The settings.yml has a conventional structure to follow as here. Copy the structure below. All you need initially is the environments, environments > common, environments > development. What is under them is not as per you chosen test frameworks (webdriver.js, chakram, sql, etc.)
 
 
     ``` yaml
@@ -175,7 +175,7 @@ To start, you need to **add salt to the duck**. Salt is your environment configu
 You can **season your duck** with a variety of small helpers from different types of tests (UI, API, database, etc)
 Salty-duck has several smaller helper extensions which do all the hard work. These are 
 
-  * **wd**: a wd.js helper for use with cucumber.js. This allows loading of page objects from file and attaching behaviours to the browser object for simplified test authoring using promise chaining.
+  * **wd**: a webdriver.js helper for use with cucumber.js. This allows loading of page objects from file and attaching behaviours to the browser object for simplified test authoring using promise chaining.
   * **mssql**: a sql helper for use with Microsoft Sql Server
   * **api-driver**: a helper for loading api objects like request, response and header templates and binding them with values for use with chakram.
   * **world-factory**: (WIP) a helper to allows the user to build a cucumber world easily and maintain common test logic in a 'type' of world
@@ -372,8 +372,17 @@ Usually after a few high-quality pull requests and friendly interactions we will
 
 After all, open source belongs to everyone.
 
+##Why the funky name?
+
+I spent a bit of time (over a year) thinking of a suitable name. Then one evening, sitting 
+with a few friends at a Nanjing restaurant, in the Chinese heartland of Burwood, Sydney I received this suggestion. 
+And it stuck. 
+
+Also, if you haven't seen my profile, I like cooking. And setting up a test is a bit like that. 
+You need to arrange, act and assert. Or prepare, cook and taste.
+
 ##Special Thanks
-to all the authors and contributors of the open source frameworks I use in salty-duck. Your work gives me and many others I work with a profession they enjoy (and a fair livelihood).  
+to all the authors and contributors of the open source frameworks I use in salty-duck. Your work gives me and many others I work with a profession they enjoy (and a fair livelihood). On the shoulders of giants as one would say.
 
 ##license
 MIT

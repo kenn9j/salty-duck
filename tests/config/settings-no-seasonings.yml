@@ -20,26 +20,28 @@
     development:
       api:
         apiBaseUrl: "https://saltyduck.devop5.io"
-
-      tags: []
-      verbose_logging: false
-      mochaTimeout: 999999
-      driverStartupWaitTime: 5000
-      implicitWaitTimeout: 10000
-      asyncScriptTimeout: 10000
-      caps:
-        browserName: "chrome"
-      driverConfig:
-        host: "localhost"
-        port: 4444
-      driverOptions:
-        timeout: 30000
-        retries: 3
-        retryDelay: 2000
-        testFolder: "/results"
-        thinkTime: 1
-        waitingForPageSleep: 1
-        baseUrl: "http://devop5.io"
+        mochaTimeout: 999999
+      wd:
+        mochaTimeout: 999999
+        tags: []
+        verbose_logging: false
+        driverStartupWaitTime: 5000
+        implicitWaitTimeout: 10000
+        asyncScriptTimeout: 10000
+        caps:
+#          browserName: "chrome"
+          browserName: "phantomjs"
+        driverConfig:
+          host: "localhost"
+          port: 4444
+        driverOptions:
+          timeout: 30000
+          retries: 3
+          retryDelay: 2000
+          testFolder: "/results"
+          thinkTime: 1
+          waitingForPageSleep: 1
+          baseUrl: "http://saltyduck.devop5.io"
       dbConfig:
         user: ""
         password: ""
@@ -53,23 +55,24 @@
           min: 0
           idleTimeoutMillis: 30000
     ci:
-      tags: []
-      debug: true
-      verbose_logging: false
-      mochaTimeout: 999999
-      caps:
-        browserName: "phantomjs"
-      driverConfig:
-        host: "localhost"
-        port: 4444
-      driverOptions:
-        timeout: 60000
-        retries: 3
-        retryDelay: 15
-        testFolder: "/results"
-        thinkTime: 1
-        waitingForPageSleep: 1
-        baseUrl: "http://localhost:9002"
+      wd:
+        tags: []
+        debug: true
+        verbose_logging: false
+        mochaTimeout: 999999
+        caps:
+          browserName: "phantomjs"
+        driverConfig:
+          host: "localhost"
+          port: 4444
+        driverOptions:
+          timeout: 60000
+          retries: 3
+          retryDelay: 15
+          testFolder: "/results"
+          thinkTime: 1
+          waitingForPageSleep: 1
+          baseUrl: "http://localhost:9002"
     acceptance:
       tags: []
     release:

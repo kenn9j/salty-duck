@@ -2,8 +2,8 @@
 # some examples here
 # https://github.com/nodeca/js-yaml/blob/master/examples/sample_document.yml
   seasonings:
-    - wd
-    - mssql
+    - webdriver
+    - db
   environments:
     development:
       debug: true

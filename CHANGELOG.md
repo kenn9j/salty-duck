@@ -26,12 +26,12 @@
 0.0.3 / 2014-11-02
 ------------------
 
-- Working with cucumber/wd.js/selenium
+- Working with cucumber/webdriver.js/selenium
 
 0.0.2 / 2014-05-14
 ------------------
 
-- Working with cucumber/wd.js/appium
+- Working with cucumber/webdriver.js/appium
 
 0.0.1 / 2014-04-02
 ------------------

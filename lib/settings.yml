@@ -1,4 +1,5 @@
 ---
+# only used for testing config in default filepath
 # some examples here
 # https://github.com/nodeca/js-yaml/blob/master/examples/sample_document.yml
   seasonings:

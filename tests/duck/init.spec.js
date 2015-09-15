@@ -14,6 +14,18 @@ describe('Salty Duck', function () {
 
   describe('.init', function () {
 
+    it('should initialise a salty duck', function () {
+
+      var saltyDuck = require('./../../index');
+      //same as
+
+      //expect(saltyDuck).to.be.eql(saltyDuck2);
+
+      expect(saltyDuck).not.to.be.null;
+      expect(saltyDuck.quack).not.to.be.null;
+
+    });
+
     it('should initialise a salty duck by default', function () {
       var duck = require('./../../index');
 
@@ -21,9 +33,6 @@ describe('Salty Duck', function () {
 
       expect(saltyDuck).not.to.be.null;
       expect(saltyDuck.quack).not.to.be.null;
-
-
-      //expect(saltyDuck).to.have.deep.property('salt.debug', true);
 
     });
     it('should initialise a salty duck with options', function () {
@@ -38,17 +47,26 @@ describe('Salty Duck', function () {
     it('should initialise a salty duck with seasonings', function () {
       var duck = require('./../../index');
 
-      var saltyDuck = duck.init(testConfig.CONFIG_NO_SEASONINGS, 'wd');
+      var saltyDuck = duck.init(testConfig.CONFIG_NO_SEASONINGS, 'webdriver');
 
       expect(saltyDuck).not.to.be.null;
       expect(saltyDuck.initBrowser).not.to.be.null;
+
+    });
+    it('should initialise a salty duck with seasonings into its own namespace', function () {
+      var duck = require('./../../index');
+
+      var saltyDuck = duck.init(testConfig.CONFIG_NO_SEASONINGS, 'webdriver');
+
+      expect(saltyDuck).not.to.be.null;
+      expect(saltyDuck.webdriver.initBrowser).not.to.be.null;
 
     });
     it('should initialise a salty duck from a provided config object', function () {
       var duck = require('./../../index');
       var obj = require('./../config/settings-json.json');
 
-      var saltyDuck = duck.init(null, 'wd', obj.environments['development']);
+      var saltyDuck = duck.init(null, 'webdriver', obj.environments['development']);
 
       expect(saltyDuck).not.to.be.null;
       expect(saltyDuck.initBrowser).not.to.be.null;
