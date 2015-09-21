@@ -282,7 +282,7 @@ describe('Salty API Driver', function () {
 
       var url = endpoint.getUrl();
 
-      expect(url).to.be.equal(path.join(saltyDuck.salt.api.apiBaseUrl, '/v1/other') );
+      expect(url).to.be.equal(saltyDuck.salt.api.apiBaseUrl + '/v1/other' );
 
     });
     it('should use a mock url for an endpoint when mock switch is true');
