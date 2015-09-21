@@ -90,7 +90,7 @@ describe('Salty Config', function () {
       expect(seasonings.length).to.equal(4);
       expect(seasonings[0]).to.eql({name:'webdriver', location: 'webdriver'}); //handles hint (eg. mssql, webdriver) and converts to full format
       expect(seasonings[1]).to.eql({name:'api', location: 'api'});
-      expect(seasonings[2]).to.eql({name:'mssql', location: 'mssql'});
+      expect(seasonings[2]).to.eql({name:'db', location: 'db'});
       expect(seasonings[3]).to.eql({name:'one', location: './my/special/one'}); //handles custom config
 
     });

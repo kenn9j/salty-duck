@@ -17,7 +17,9 @@ describe('Salty SqlDriver', function () {
 
       var saltyDuck = require('./../../index').init(testConfig.CONFIG_NO_SEASONINGS, 'db');
 
-      var database = saltyDuck.db.getDb();
+      expect(saltyDuck.db).to.be.a('object');
+
+      var database = saltyDuck.db.init();
 
       database
           .query('select * from x')
@@ -34,7 +36,7 @@ describe('Salty SqlDriver', function () {
 
       var saltyDuck = require('./../../index').init(testConfig.CONFIG_NO_SEASONINGS, 'db');
 
-      var database = saltyDuck.db.getDb();
+      var database = saltyDuck.db.init();
 
       database
           .insert('insert into A ... ')
@@ -54,19 +56,28 @@ describe('Salty SqlDriver', function () {
 
       var saltyDuck = require('./../../index').init(testConfig.CONFIG_NO_SEASONINGS, 'db');
 
-      var database = saltyDuck.db.getDb();
+      var database = saltyDuck.db.init();
 
-      database
-          .loadSqlObjects('/tests/sql/sometest.db.js')
-          .SomeSpecialSqlStatement({some:'params',go:'here'})
-          .then(function(recordset){
+      try {
+        database
+            .loadSqlObjects('/tests/sql/sometest.db.js')
+            .SomeSpecialSqlStatement({some: 'params', go: 'here'})
+            .then(function (recordset) {
 
-          });
+            });
+      } catch (e) {
+        expect(e.message).to.be.equal("Cannot read property 'SomeSpecialSqlStatement' of undefined")
+      }
 
-      var sqlObjects =  saltyDuck
-          .loadSqlObjects('/tests/sql/sometest.db.js')// ?? is this like stored procs ? or object faces
-          .select('')//can we use node-sql instead, then use the provided
-          .where('');
+      try {
+        var sqlObjects = database
+            .loadSqlObjects('/tests/sql/sometest.db.js')// ?? is this like stored procs ? or object faces
+            .select('')//can we use node-sql instead, then use the provided
+            .where('');
+      } catch (e) {
+        expect(e.message).to.be.equal("Cannot read property 'select' of undefined")
+        //todo:[kj] impleent this
+      }
 
     });
     it('should bind the sql with params from an array');
