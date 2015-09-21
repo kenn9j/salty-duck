@@ -20,7 +20,7 @@ Coming soon..
 
 ## Prerequesites
 
-* [Node.js](https://nodejs.org) or [io.js](https://iojs.org)
+* [Node.js](https://nodejs.org) 
 * [NPM](https://www.npmjs.com)
 
 ## Getting Started with a duck
