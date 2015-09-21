@@ -76,7 +76,7 @@ describe('Salty API Driver', function () {
       var duck = require('./../../index');
       var saltyDuck = duck.init(testConfig.CONFIG_NO_SEASONINGS, 'api');
 
-      expect(saltyDuck.api).to.be.a('function');
+      expect(saltyDuck.api).to.be.an('function');
 
       var dummyApiScope = saltyDuck.api.loadApiObjects(dummyRootRelativeFilePath);
 
@@ -171,7 +171,7 @@ describe('Salty API Driver', function () {
       expect(dummyApiScope.searchEndpoint.headers.DefaultOptionsHeader.bindParams({Authorization:'some-auth-token'}).Authorization)
           .to.eq('bearer some-auth-token');
       var templateAfterBinding = dummyApiScope.searchEndpoint.headers.DefaultOptionsHeader.template();
-      expect(templateBeforeBinding).to.not.eql(templateAfterBinding, 'is equal, which means the template was not cloned and it got overwritten');
+      expect(templateBeforeBinding).to.be.eql(templateAfterBinding, 'is not equal, which means the template was not cloned and it got overwritten by a binding action');
 
     });
     it('should bind custom headers', function(){
@@ -181,7 +181,7 @@ describe('Salty API Driver', function () {
       var dummyApiScope = saltyDuck.api.loadApiObjects(dummyRootRelativeFilePath);
 
       expect(dummyApiScope.searchEndpoint).to.include.keys('headers');
-      expect(dummyApiScope.searchEndpoint.headers.DefaultOptionsHeader.bindParams({ApiKey:'2.12.1.0'}))
+      expect(dummyApiScope.searchEndpoint.headers.DefaultOptionsHeader.bindParams({ApiKey:'2.12.1.0', Authorization:'some-auth-token'}))
           .to.eql({
             "ApiKey": "2.12.1.0",
             "Authorization": "bearer some-auth-token",
@@ -230,30 +230,28 @@ describe('Salty API Driver', function () {
                 two: {
                   three: {
                     //fourString: "some string on level 4", <-- omit a line
-                    fourStringToBeBound: "'four'",
-                    fourObject: {some:1, thing: 4.2, blah: 3.1}
+                    fourStringToBeBound: "'four-ish'",
+                    fourObject: { some:1, thing: 4.2, blah: 3.1 }
                   }
                 }
-              }
+              },
+              ola:'hello-again'
             }
           });
 
       var expectedObject = {
-        "bindableText": "Beautiful",
-        "level": {
-          "one": {
-            "two": {
-              "three": {
-                "fourObject": {
-                  "blah": 3.1,
-                  "some": 1,
-                  "thing": 4.2
-                },
-                "fourString": "some string on level 4",
-                "fourStringToBeBound": "some string on level 'four'",
+        bindableText:'Beautiful',
+        level: {
+          one: {
+            two: {
+              three: {
+                fourString: "some string on level 4",
+                fourStringToBeBound: "some string on level 'four-ish'",
+                fourObject: {some:1, thing: 4.2, blah: 3.1 }
               }
             }
-          }
+          },
+          ola: 'hello-again'
         }
       };
 

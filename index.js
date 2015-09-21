@@ -20,9 +20,6 @@ function Duck() {
 Duck = _.assign(Duck, require('./lib/salty'));
 Duck = _.assign(Duck, require('./lib/config'));
 
-//include default seasonings
-Duck.webdriver = require('./lib/seasoning/webdriver');
-Duck.api = require('./lib/seasoning/api');
 
 /**
  *  Duck.init(options [optional], seasonings [optional], configObject [optional]) -> Duck
@@ -166,7 +163,7 @@ Duck.addSeasoning = function (seasoning) {
 
     try {
       var seasoningLib = require('./lib/seasoning/' + seasoning.location);
-      Duck[seasoning.name] = seasoningLib ;// _.assign(Duck, seasoningLib);
+      Duck[seasoning.name] = seasoningLib;//(_salt) ;// _.assign(Duck, seasoningLib);
       Duck.quack('Quack!'.cyan +
           ' added seasoning..  ' + seasoning + " - "
           + seasoningLib.NAME + " " + seasoningLib.DESCRIPTION);
@@ -180,8 +177,17 @@ Duck.addSeasoning = function (seasoning) {
 
 };
 
-//
-Duck.NAME = 'Duck';
-Duck.VERSION = '0.0.1';
+/**
+ * Get the config
+ * @returns {*} salt - configuration for the salty-duck
+ */
+Duck.getConfig = function salt(){
+  return _salt;
+};
 
+//include default seasonings
+Duck.webdriver = require('./lib/seasoning/webdriver')(Duck.getConfig);
+Duck.api = require('./lib/seasoning/api')(Duck.getConfig);
+
+//
 module.exports = Duck;

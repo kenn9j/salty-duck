@@ -88,7 +88,8 @@ module.exports = {
                 fourObject: {some:1, thing: 2}
               }
             }
-          }
+          },
+          ola: 'hello'
         }
       }
     }
