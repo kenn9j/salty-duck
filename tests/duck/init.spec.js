@@ -37,20 +37,32 @@ describe('Salty Duck', function () {
     });
     it('should initialise a salty duck with options', function () {
       var duck = require('./../../index');
-
       var saltyDuck = duck.init({configFile: testConfig.DEFAULT_CONFIG_FOR_TESTS});
 
       expect(saltyDuck).not.to.be.null;
       expect(saltyDuck.quack).not.to.be.null;
 
     });
-    it('should initialise a salty duck with seasonings', function () {
-      var duck = require('./../../index');
+    it('should initialise a salty duck with default seasonings', function () {
 
-      var saltyDuck = duck.init(testConfig.CONFIG_NO_SEASONINGS, 'webdriver');
+      var saltyDuck = require('./../../index');
 
       expect(saltyDuck).not.to.be.null;
       expect(saltyDuck.initBrowser).not.to.be.null;
+
+    });
+    it('should initialise a salty duck with seasonings', function () {
+      //var duck = require('./../../index');
+      //
+      //var saltyDuck = duck.init(testConfig.CONFIG_NO_SEASONINGS, 'webdriver');
+      var saltyDuck = require('./../../index');
+
+      expect(saltyDuck).not.to.be.null;
+      expect(saltyDuck.loadApiObjects).to.be.undefined;
+      expect(saltyDuck.initBrowser).to.be.undefined;
+      //works when default seasoning is part of Duck.prototype.xx
+      expect(saltyDuck.webdriver.initBrowser).to.not.be.undefined;
+      expect(saltyDuck.api.loadApiObjects).to.not.be.undefined;
 
     });
     it('should initialise a salty duck with seasonings into its own namespace', function () {

@@ -17,9 +17,9 @@ describe('Salty SqlDriver', function () {
 
       var saltyDuck = require('./../../index').init(testConfig.CONFIG_NO_SEASONINGS, 'db');
 
-      expect(saltyDuck.db).to.be.a('object');
+      expect(saltyDuck.db).to.be.a('function');
 
-      var database = saltyDuck.db.init();
+      var database = saltyDuck.db.getDb();
 
       database
           .query('select * from x')
@@ -36,10 +36,10 @@ describe('Salty SqlDriver', function () {
 
       var saltyDuck = require('./../../index').init(testConfig.CONFIG_NO_SEASONINGS, 'db');
 
-      var database = saltyDuck.db.init();
+      var database = saltyDuck.db.getDb();
 
       database
-          .insert('insert into A ... ')
+          .execute('insert into A ... ')
           .catch(function(err){
             expect(err.name).to.be.equal('ConnectionError');
           });

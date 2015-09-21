@@ -13,6 +13,16 @@ var testConfig = require('./../testconfig');
 
 describe('Salty API Driver', function () {
 
+  describe('.init', function(){
+    it('should init the API Driver', function(){
+      var duck = require('./../../index');
+      var saltyDuck = duck.init(testConfig.CONFIG_NO_SEASONINGS, 'api');
+
+      expect(saltyDuck.api).to.be.a('function');
+      expect(saltyDuck.api.init()).to.be.a('function');
+      expect(saltyDuck.api.loadApiObjects).to.be.a('function');
+    });
+  });
   describe('.loadApiObjects', function(){
 
     var dummyRootRelativeFilePath = 'tests/api/dummy.api.js';
@@ -229,7 +239,7 @@ describe('Salty API Driver', function () {
               one: {
                 two: {
                   three: {
-                    //fourString: "some string on level 4", <-- omit a line
+                    fourString: "some string on level 4", //<-- omit a line
                     fourStringToBeBound: "'four-ish'",
                     fourObject: { some:1, thing: 4.2, blah: 3.1 }
                   }

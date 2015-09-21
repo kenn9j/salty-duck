@@ -87,11 +87,11 @@ describe('Salty Config', function () {
 
       var seasonings = saltyConfig.seasonings('./../tests/config/settings.yml');
 
-      expect(seasonings.length).to.equal(4);
+      expect(seasonings.length).to.equal(3);
       expect(seasonings[0]).to.eql({name:'webdriver', location: 'webdriver'}); //handles hint (eg. mssql, webdriver) and converts to full format
       expect(seasonings[1]).to.eql({name:'api', location: 'api'});
       expect(seasonings[2]).to.eql({name:'db', location: 'db'});
-      expect(seasonings[3]).to.eql({name:'one', location: './my/special/one'}); //handles custom config
+      //expect(seasonings[3]).to.eql({name:'one', location: './my/special/one'}); //handles custom config
 
     });
     it('should load added seasonings from the init with a hint as param', function () {
@@ -131,7 +131,7 @@ describe('Salty Config', function () {
 
       console.log(seasonings);
 
-      expect(seasonings.length).to.equal(4);
+      expect(seasonings.length).to.equal(3);
 
     });
   });

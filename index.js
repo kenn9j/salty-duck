@@ -17,6 +17,8 @@ function Duck() {
   return this.init();
 }
 
+module.exports = Duck;
+
 Duck = _.assign(Duck, require('./lib/salty'));
 Duck = _.assign(Duck, require('./lib/config'));
 
@@ -142,6 +144,7 @@ Duck.addSeasoning = function (seasoning) {
 
 
   var hasSeasoning = _.includes(_seasonings, seasoning);
+  //todo:[kj] instead remove seasoning
   if(hasSeasoning)
     return;
 
@@ -151,25 +154,23 @@ Duck.addSeasoning = function (seasoning) {
 
   if (/^\./.test(seasoning.location)) {
     if (fs.existsSync(seasoning)) {
-      Duck = _.assign(Duck, require(seasoning.location));
-      Duck.quack('Quack!'.cyan +
-          ' added custom seasoning..  ' + seasoning.location);
+      //Duck = _.assign(Duck, require(seasoning.location));
+      Duck.prototype[seasoning.name] = require(seasoning.location)();
+      Duck.quack('Quack!'.cyan + ' added custom seasoning..  ' + seasoning.location);
     } else {
-      //throw new Error('Module ' + seasoning.location + ' could not be found.');
       Duck.quack('Module ' + seasoning.location + ' could not be found.');
+      throw new Error('Module ' + seasoning.location + ' could not be found.');
     }
 
   } else {
 
     try {
       var seasoningLib = require('./lib/seasoning/' + seasoning.location);
-      Duck[seasoning.name] = seasoningLib;//(_salt) ;// _.assign(Duck, seasoningLib);
-      Duck.quack('Quack!'.cyan +
-          ' added seasoning..  ' + seasoning + " - "
-          + seasoningLib.NAME + " " + seasoningLib.DESCRIPTION);
+      Duck[seasoning.name] = seasoningLib.init(_salt);
+      //Duck.quack('Quack!'.cyan + ' added seasoning:  ' + seasoning.name);
     } catch (e) {
-      Duck.quack(e.message + '\n' + 'Module ' + seasoning.location + ' could not be found.');
-      //throw new Error('Module ' + seasoningLib + ' could not be found.');
+      Duck.quack(e.message + '\n' + 'Module ' + seasoning.name + ':' + seasoning.location + ' could not be found.');
+      throw new Error('Module ' + seasoning.name + ':' + seasoning.location + ' could not be found.');
     }
   }
 
@@ -185,9 +186,3 @@ Duck.getConfig = function salt(){
   return _salt;
 };
 
-//include default seasonings
-Duck.webdriver = require('./lib/seasoning/webdriver')(Duck.getConfig);
-Duck.api = require('./lib/seasoning/api')(Duck.getConfig);
-
-//
-module.exports = Duck;

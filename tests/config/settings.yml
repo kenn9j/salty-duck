@@ -5,7 +5,6 @@
     - webdriver
     - api
     - db
-    - ./my/special/one
   environments:
     common:
       debug: true
@@ -62,23 +61,24 @@
             min: 0
             idleTimeoutMillis: 30000
     ci:
-      tags: []
       debug: true
-      verbose_logging: false
-      mochaTimeout: 999999
-      caps:
-        browserName: phantomjs
-      driverConfig:
-        host: "localhost"
-        port: 4444
-      driverOptions:
-        timeout: 60000
-        retries: 3
-        retryDelay: 15
-        testFolder: /results
-        thinkTime: 1
-        waitingForPageSleep: 1
-        baseUrl: http://localhost:9002
+      wd:
+        tags: []
+        verbose_logging: false
+        mochaTimeout: 999999
+        caps:
+          browserName: phantomjs
+        driverConfig:
+          host: "localhost"
+          port: 4444
+        driverOptions:
+          timeout: 60000
+          retries: 3
+          retryDelay: 15
+          testFolder: /results
+          thinkTime: 1
+          waitingForPageSleep: 1
+          baseUrl: http://localhost:9002
     acceptance:
       tags: []
     release:
