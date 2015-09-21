@@ -97,20 +97,83 @@ describe('Salty API Driver', function () {
       //basic text binding
       expect(dummyApiScope.searchEndpoint.requests.searchGetRequest_template.bindParams('Hendrix'))
           .to.eq("q=Hendrix&type=artist");
+
+    });
+    it('should bind a GET request template multiple tokens', function(){
+      var duck = require('./../../index');
+      var saltyDuck = duck.init(testConfig.CONFIG_NO_SEASONINGS, 'api');
+
+      expect(saltyDuck.api).to.be.an('function');
+
+      var dummyApiScope = saltyDuck.api.loadApiObjects(dummyRootRelativeFilePath);
+
+      expect(dummyApiScope.searchEndpoint).to.include.keys('requests');
       //multi text binding
       expect(dummyApiScope.searchEndpoint.requests.searchGetRequest_template_withMultiplePlaceholders.bindParams('Hendrix'))
           .to.eq("q=HendrixHendrix&Hendrixtype=artist");
+
+    });
+    it('should bind a GET request template using a parameter object', function(){
+      var duck = require('./../../index');
+      var saltyDuck = duck.init(testConfig.CONFIG_NO_SEASONINGS, 'api');
+
+      expect(saltyDuck.api).to.be.an('function');
+
+      var dummyApiScope = saltyDuck.api.loadApiObjects(dummyRootRelativeFilePath);
+
       //object params binding
       expect(dummyApiScope.searchEndpoint.requests.searchGetRequest_template.bindParams({artist:'Hendrix'}))
           .to.eq("q=Hendrix&type=artist");
       //object multiple params binding
       expect(dummyApiScope.searchEndpoint.requests.searchGetRequest_template_withTwoPlaceholders.bindParams({artist1:'Hendrix',artist2:'Lennon'}))
           .to.eq("q=Hendrix,Lennon&type=artist");
+
+
+    });
+    it('should bind a GET request template and handle url encoding', function(){
+      var duck = require('./../../index');
+      var saltyDuck = duck.init(testConfig.CONFIG_NO_SEASONINGS, 'api');
+
+      expect(saltyDuck.api).to.be.an('function');
+
+      var dummyApiScope = saltyDuck.api.loadApiObjects(dummyRootRelativeFilePath);
+
       //ensure binding handles url encoding
       expect(dummyApiScope.searchEndpoint.requests.searchGetRequest_template.bindParams({artist:'Jimi Hendrix'}))
           .to.eq("q=Jimi%20Hendrix&type=artist");
 
+
     });
+    //get request #getUrl methods
+    it('should bind and get a GET request url with url encoding', function(){
+      var duck = require('./../../index');
+      var saltyDuck = duck.init(testConfig.CONFIG_NO_SEASONINGS, 'api');
+
+      expect(saltyDuck.api).to.be.an('function');
+
+      var dummyApiScope = saltyDuck.api.loadApiObjects(dummyRootRelativeFilePath);
+
+      expect(dummyApiScope.searchEndpoint.requests.searchGetRequest_template.getUrl({artist:'Jimi Hendrix'}))
+          .to.eq("https://saltyduck.devop5.io/v1/search?q=Jimi%20Hendrix&type=artist");
+
+
+    });
+    it('should bind and get a GET request url with url encoding', function(){
+      var duck = require('./../../index');
+      var saltyDuck = duck.init(testConfig.CONFIG_NO_SEASONINGS, 'api');
+
+      expect(saltyDuck.api).to.be.an('function');
+
+      var dummyApiScope = saltyDuck.api.loadApiObjects(dummyRootRelativeFilePath);
+
+      expect(dummyApiScope.searchEndpoint.requests.get.getUrl({artist:'Jimi Hendrix'}))
+          .to.eq("https://saltyduck.devop5.io/v1/search?q=Jimi%20Hendrix&type=artist&littleGet");
+      expect(dummyApiScope.searchEndpoint.requests.GET.getUrl({artist:'Jimi Hendrix'}))
+          .to.eq("https://saltyduck.devop5.io/v1/search?q=Jimi%20Hendrix&type=artist&bigGET");
+
+
+    });
+    //post
     it('should bind a POST request for the endpoint', function(){
       var duck = require('./../../index');
       var saltyDuck = duck.init(testConfig.CONFIG_NO_SEASONINGS, 'api');

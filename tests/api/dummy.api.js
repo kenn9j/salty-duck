@@ -13,6 +13,9 @@ module.exports = {
     },
 
     requests: {
+      get: "q={{artist}}&type=artist&littleGet",
+      GET: "q={{artist}}&type=artist&bigGET",
+      post: {artist:'',age:18},
       searchGetRequest_basic: "q=Stevie%20Wonder&type=artist",
       searchGetRequest_template: "q={{artist}}&type=artist",
       searchGetRequest_template_withTwoPlaceholders: "q={{artist1}},{{artist2}}&type=artist",
