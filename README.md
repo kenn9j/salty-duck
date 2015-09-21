@@ -78,16 +78,18 @@ The settings.yml has a conventional structure to follow as here. Copy the struct
     ---
     # some examples here
     # https://github.com/nodeca/js-yaml/blob/master/examples/sample_document.yml
-      seasonings: #optional, holds a list of helpers to be loaded
-        - wd
-        - mssql
+      seasonings: #optional, a list of default helpers to be loaded
+        - webdriver
+        - api
+        - db
+        - ./my/special/one # to ad your own seasoning
       environments:
-        common: #these settings used on all envrionments
+        common: #these settings used on all environments
           dbConfig:
-            user: ""
-            password: ""
-            server: ""
-            database: ""
+            user: john
+            password: jane
+            server: ourDbServer
+            database: someDb
             port: 1433
             options:
               encrypt: false
@@ -97,49 +99,58 @@ The settings.yml has a conventional structure to follow as here. Copy the struct
               idleTimeoutMillis: 30000
         development:
           debug: true #tells salty-duck to show or hide your quacks
-          tags: [] #wd
-          verbose_logging: false #tells salty-duck to do verbose logging
-          mochaTimeout: 999999 #provides a default mocha time out
-          driverStartupWaitTime: 5000 #wd uses it to wait for browser to startup 
-          implicitWaitTimeout: 10000 #wd
-          asyncScriptTimeout: 10000 #wd
-          caps: #wd
-            browserName: "chrome" #wd
-          driverConfig: #wd 
-            host: "localhost" #wd points to default wd server
-            port: 4444 #wd points to default wd port
-          driverOptions: #wd
-            timeout: 30000 
-            retries: 3
-            retryDelay: 2000
-            #wd custom for SaltyWebDriver
-            testFolder: "/results" #wd reports storage location
-            thinkTime: 1  #wd slow the tests down
-            waitingForPageSleep: 1 
-            baseUrl: "http://devop5.io" 
-          dbConfig: #sql-helper
-            user: ""
-            password: ""
-            server: ""
-            database: ""
+          wd:
+            tags: [] #wd
+            verbose_logging: false #tells salty-duck to do verbose logging
+            mochaTimeout: 999999 #provides a default mocha time out
+            driverStartupWaitTime: 5000 #wd uses it to wait for browser to startup 
+            implicitWaitTimeout: 10000 #wd
+            asyncScriptTimeout: 10000 #wd
+            caps: #wd
+              browserName: "chrome" #wd
+            driverConfig: #wd 
+              host: "localhost" #wd points to default wd server
+              port: 4444 #wd points to default wd port
+            driverOptions: #wd
+              timeout: 30000 
+              retries: 3
+              retryDelay: 2000
+              #wd custom for SaltyWebDriver
+              testFolder: "/results" #wd reports storage location
+              thinkTime: 1  #wd slow the tests down
+              waitingForPageSleep: 1 
+              baseUrl: "http://devop5.io" 
+          dbConfig:
+            name: mssqldb01
+            dialect: mssql # possible dialects: mssql, mysql, postgres (default), sqlite
+            user:
+            password:
+            server: #same as host but for mssql
+            host: #same as server but for mysql
+            database:
             port: 1433
             options:
               encrypt: false
             pool:
               max: 10
               min: 0
-              idleTimeoutMillis: 30000 
+              idleTimeoutMillis: 30000
+          anotherDbConfig:
+            ...
         ci:
           debug: false
-          tags: []
-          debug: true
-          verbose_logging: false
-          mochaTimeout: 999999
-          caps:
-            browserName: "phantomjs"
-          driverConfig:
-            ...
-          driverOptions:
+          wd:
+            tags: []
+            debug: true
+            verbose_logging: false
+            mochaTimeout: 999999
+            caps:
+              browserName: "phantomjs"
+            driverConfig:
+              ...
+            driverOptions:
+              ...
+          dbConfig:
             ...
         acceptance:
           ...
@@ -162,7 +173,7 @@ Now you must..
 To start, you need to **add salt to the duck**. Salt is your environment configuration. When a saltyDuck is initialised via saltyDuck.init(), it is expected that there is a settings.yml file in the root (see 2.)
 
    ```
-    var saltyDuck = require('salty-duck').init();
+    var saltyDuck = require('salty-duck');
    ```
    
    OR 
