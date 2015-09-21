@@ -9,7 +9,7 @@
     "gherkin",
     "tests"
   ],
-  "version": "0.5.2",
+  "version": "0.5.3",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/kenn9j/salty-duck.git"
